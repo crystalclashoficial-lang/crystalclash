@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crystal Clash — Orbital Devs</title>
+<link rel="icon" type="image/png" href="img/icono-64.png">
+<link rel="apple-touch-icon" href="img/icono-180.png">
+<meta name="description" content="Crystal Clash: batallas por equipos llenas de bombas, poderes y estrategia. Toma el Cristal y llévalo a tu base antes que tu rival. Para PC y celular.">
+<style>
+  @font-face { font-family: "CC"; src: url("fonts/inter-display.otf") format("opentype"); font-weight: 100 900; font-display: swap; }
+  :root {
+    --bg: #0b1630; --panel: rgba(16, 26, 54, .92); --panel2: rgba(10, 16, 36, .92);
+    --rim: rgba(255, 214, 90, .55); --soft: rgba(255, 255, 255, .14);
+    --gold: #ffd23f; --gold2: #ff9a1f; --blue: #3f86ff; --text: #fff; --muted: #cfe3ff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: "CC", system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.55; }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 20px; }
+
+  /* Barra de arriba */
+  .nav { position: sticky; top: 0; z-index: 10; background: rgba(8, 14, 32, .86); backdrop-filter: blur(8px); border-bottom: 1px solid var(--soft); }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 20px; letter-spacing: 1px; color: var(--gold); }
+  .brand img { width: 38px; height: 38px; border-radius: 10px; border: 2px solid rgba(255,255,255,.25); }
+  .links { display: flex; gap: 22px; font-weight: 700; font-size: 15px; color: var(--muted); }
+  .links a:hover { color: #fff; }
+
+  /* Botones como los del juego */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 26px; border-radius: 16px;
+    font-weight: 900; letter-spacing: .5px; color: #fff; text-shadow: 0 2px 0 rgba(0,0,0,.35);
+    border: 2px solid rgba(255,255,255,.28); background: linear-gradient(180deg, var(--a), var(--b));
+    box-shadow: inset 0 3px 0 rgba(255,255,255,.35), 0 6px 0 var(--d), 0 12px 22px rgba(0,0,0,.35); }
+  .btn small { display: block; font-size: 12px; font-weight: 800; opacity: .9; letter-spacing: 1px; }
+  .btn .two { text-align: left; line-height: 1.15; }
+  .orange { --a: #ffbd4a; --b: #ef8a12; --d: #a85a00; }
+  .blue { --a: #5aa7ff; --b: #2f6fe0; --d: #1b4aa3; }
+  .gray { --a: #6f7b96; --b: #4b556c; --d: #2c3344; }
+
+  /* Portada */
+  .hero { position: relative; min-height: 640px; display: flex; align-items: center; overflow: hidden;
+    background: url("img/fondo.jpg") center/cover; }
+  .hero::before { content: ""; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 45%, rgba(6,12,30,.25), rgba(6,12,30,.85) 75%), linear-gradient(180deg, rgba(6,12,30,.1), var(--bg) 98%); }
+  .hero .wrap { position: relative; display: grid; grid-template-columns: 1.25fr .75fr; align-items: center; gap: 24px; width: 100%; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .hero-logo { justify-self: center; width: min(100%, 440px); filter: drop-shadow(0 18px 26px rgba(0,0,0,.55)); }
+  .tagline { margin: 0 0 12px; font-size: clamp(28px, 3.6vw, 46px); line-height: 1.12; font-weight: 900; }
+  .sub { color: #e8eefb; font-size: 18px; max-width: 560px; margin-bottom: 10px; }
+  .platform-note { color: var(--gold); font-weight: 800; letter-spacing: .5px; margin-bottom: 26px; }
+  .motto { color: var(--gold); font-weight: 900; }
+  .final-box { text-align: center; padding: 44px 24px; background: linear-gradient(180deg, rgba(40,30,8,.55), var(--panel2)); }
+  .final-box .lead { margin: 0 auto 24px; }
+  .final-box .cta { justify-content: center; }
+  .cta { display: flex; flex-wrap: wrap; gap: 16px; }
+  .stage { position: relative; justify-self: center; margin-bottom: 60px; }
+  .stage img.portal { position: absolute; width: 330px; left: 50%; bottom: -78px; transform: translateX(-50%); opacity: .95; }
+  .stage .voltar { position: relative; width: 380px; }
+  .voltar { aspect-ratio: 1; background: url("img/voltar.webp") 0 0 / 400% 800% no-repeat; filter: drop-shadow(0 16px 18px rgba(0,0,0,.55)); }
+
+  /* Secciones */
+  section { padding: 84px 0 0; }
+  .kicker { color: var(--gold); font-weight: 900; letter-spacing: 3px; font-size: 14px; }
+  h2 { font-size: clamp(30px, 4vw, 44px); font-weight: 900; margin: 6px 0 14px; }
+  .lead { color: var(--muted); font-size: 18px; max-width: 760px; }
+  .panel { background: linear-gradient(180deg, var(--panel), var(--panel2)); border: 2px solid var(--soft); border-radius: 22px;
+    box-shadow: 0 12px 28px rgba(0,0,0,.35), inset 0 2px 0 rgba(255,255,255,.08); }
+  .gold-rim { border-color: var(--rim); }
+
+  .story { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: center; }
+  .story .panel { padding: 28px; font-size: 18px; }
+  .story .panel p + p { margin-top: 12px; }
+
+  .grid { display: grid; gap: 18px; margin-top: 28px; }
+  .g4 { grid-template-columns: repeat(4, 1fr); }
+  .g3 { grid-template-columns: repeat(3, 1fr); }
+  .g5 { grid-template-columns: repeat(5, 1fr); }
+  .card { padding: 22px; }
+  .card h3 { font-size: 20px; font-weight: 900; margin: 10px 0 6px; }
+  .card p { color: var(--muted); font-size: 15.5px; }
+  .num { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-weight: 900; font-size: 22px; color: #3a2400;
+    background: radial-gradient(circle at 40% 32%, #fff3b0, #ffcc33 45%, #c98a00); border: 3px solid #fff0b8; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 10px; font-size: 12px; font-weight: 900; letter-spacing: 1px; background: var(--c); }
+
+  .power { display: flex; gap: 14px; align-items: center; padding: 16px 18px; }
+  .power .ico { flex: none; width: 56px; height: 56px; filter: drop-shadow(0 4px 6px rgba(0,0,0,.35)); }
+  .power b { display: block; font-size: 17px; }
+  .power span { color: var(--muted); font-size: 14.5px; }
+
+  .heroes { display: grid; grid-template-columns: .8fr 1.2fr; gap: 28px; align-items: center; margin-top: 28px; }
+  .heroes .art { display: grid; place-items: center; padding: 18px 26px 26px; background: radial-gradient(circle at 50% 45%, rgba(63,134,255,.28), transparent 65%), linear-gradient(180deg, var(--panel), var(--panel2)); }
+  .heroes .art .voltar { width: 260px; }
+  .name { margin-top: -6px; padding: 6px 26px; border-radius: 12px; font-weight: 900; letter-spacing: 3px; color: var(--gold); background: rgba(6,12,30,.8); border: 2px solid var(--rim); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0; }
+  .chips span { padding: 6px 14px; border-radius: 999px; font-weight: 800; font-size: 14px; background: rgba(255,255,255,.08); border: 2px solid var(--soft); }
+  .bombs { display: inline-grid; grid-template-columns: repeat(4, 88px); gap: 14px; padding: 14px 18px; }
+  .bombs img { width: 100%; filter: drop-shadow(0 6px 8px rgba(0,0,0,.45)); transition: transform .2s; }
+  .bombs img:hover { transform: translateY(-4px) rotate(-6deg) scale(1.06); }
+  .notice { margin-top: 18px; padding: 16px 18px; border-radius: 16px; background: rgba(63, 134, 255, .14); border: 2px solid rgba(90, 167, 255, .45); font-weight: 700; }
+  .notice b { color: #8fc4ff; }
+
+  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 28px; }
+  .gallery img { border-radius: 16px; border: 2px solid var(--soft); aspect-ratio: 20 / 9; object-fit: cover; width: 100%; }
+  .gallery img:first-child { grid-column: span 2; grid-row: span 2; height: 100%; }
+
+  .platforms { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 28px; }
+  .platforms .card { padding: 26px; }
+  .platforms .best { border-color: var(--rim); }
+  .platforms ul { margin: 10px 0 18px 20px; color: var(--muted); }
+
+  footer { margin-top: 90px; padding: 36px 0 44px; border-top: 1px solid var(--soft); background: rgba(6, 11, 26, .7); }
+  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; color: var(--muted); font-size: 15px; }
+  footer nav { display: flex; gap: 20px; flex-wrap: wrap; font-weight: 700; }
+  footer nav a { color: #fff; }
+
+  @media (max-width: 900px) {
+    .links { display: none; }
+    .hero .wrap, .story, .heroes, .platforms { grid-template-columns: 1fr; }
+    .hero { min-height: 0; padding: 60px 0 90px; }
+    .hero-logo { order: -1; width: 280px; }
+    .stage .voltar { width: 260px; }
+    .stage img.portal { width: 230px; bottom: -54px; }
+
+    .g4, .g5 { grid-template-columns: 1fr 1fr; }
+    .g3, .gallery { grid-template-columns: 1fr; }
+    .gallery img:first-child { grid-column: auto; grid-row: auto; }
+  }
+  @media (max-width: 520px) { .g4, .g5 { grid-template-columns: 1fr; } .bombs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; } .btn { width: 100%; } .nav .btn { display: none; } }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#"><img src="img/icono-64.png" alt="">CRYSTAL CLASH</a>
+    <nav class="links">
+      <a href="#leyenda">Leyenda</a><a href="#como">Cómo se juega</a><a href="#modos">Modos</a>
+      <a href="#poderes">Poderes</a><a href="#heroes">Héroes</a><a href="#plataformas">Plataformas</a>
+    </nav>
+    <a class="btn orange" href="#plataformas" style="padding:10px 18px;font-size:14px">PRÓXIMAMENTE</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <h1 class="sr">Crystal Clash</h1>
+      <p class="tagline">El cristal es poder.<br>La batalla es inevitable.</p>
+      <p class="sub">Bombas, poderes y estrategia en batallas por equipos de ritmo frenético. Toma el Cristal y llévalo a tu base antes que tu rival.</p>
+      <p class="platform-note">Diseñado para PC · También disponible en celular</p>
+      <div class="cta">
+        <a class="btn orange" href="#plataformas"><span class="two"><small>PRÓXIMAMENTE EN</small>PC · itch.io</span></a>
+        <a class="btn blue" href="#plataformas"><span class="two"><small>PRÓXIMAMENTE EN</small>Android · Google Play</span></a>
+      </div>
+    </div>
+    <img class="hero-logo" src="img/logo.webp" alt="Logo de Crystal Clash">
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section id="leyenda">
+    <div class="story">
+      <div>
+        <p class="kicker">LA LEYENDA</p>
+        <h2>Una estrella. Un cristal. Una guerra sin fin.</h2>
+        <div class="panel gold-rim">
+          <p>Hace miles de años, una estrella cayó del cielo y dio origen al <b>Cristal Primordial</b>, una fuente de magia capaz de sostener el mundo entero.</p>
+          <p>La ambición desató una guerra que lo partió en fragmentos dispersos por toda la tierra. Hoy, cada fragmento es el tesoro más codiciado, y quien los reúna todos dominará el destino del mundo.</p>
+          <p class="motto">El cristal es poder. La batalla es inevitable. ¿Estás listo para conquistarlo?</p>
+        </div>
+      </div>
+      <div class="stage">
+        <img class="portal" src="img/portal.png" alt="">
+        <div class="voltar" role="img" aria-label="Voltar, héroe de Crystal Clash"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="como">
+    <p class="kicker">CÓMO SE JUEGA</p>
+    <h2>Cuatro pasos. Mil formas de ganar.</h2>
+    <p class="lead">Cada partida es una carrera contra tu rival: abre camino, hazte más fuerte y arrebata el Cristal en el momento justo. Gana el primer equipo en sumar los puntos necesarios.</p>
+    <div class="grid g4">
+      <div class="panel card"><div class="num">1</div><h3>Abre camino</h3><p>Coloca bombas, destruye cajas y descubre los poderes que esconden.</p></div>
+      <div class="panel card"><div class="num">2</div><h3>Hazte fuerte</h3><p>Suma bombas, alcance y velocidad, o consigue poderes capaces de cambiar el rumbo de la batalla.</p></div>
+      <div class="panel card"><div class="num">3</div><h3>Libera el Cristal</h3><p>Elimina a tus rivales para romper el sello que protege el Cristal del centro.</p></div>
+      <div class="panel card"><div class="num">4</div><h3>Llévalo a casa</h3><p>Corre con el Cristal hasta tu base sin que te lo arrebaten. Cada entrega es un punto para tu equipo.</p></div>
+    </div>
+  </section>
+
+  <section id="modos">
+    <p class="kicker">MODOS DE JUEGO</p>
+    <h2>Elige tu batalla</h2>
+    <div class="grid g5">
+      <div class="panel card"><span class="tag" style="--c:#4b556c">TUTORIAL</span><h3>Aprende a jugar</h3><p>Niveles guiados para dominar cada mecánica y cada poder.</p></div>
+      <div class="panel card"><span class="tag" style="--c:#2f6fe0">1 VS 1</span><h3>Duelo</h3><p>Habilidad pura, cara a cara. Solo uno se lleva el Cristal.</p></div>
+      <div class="panel card"><span class="tag" style="--c:#25a957">2 VS 2</span><h3>Por equipos</h3><p>Coordina con tu compañero y domina el campo de batalla.</p></div>
+      <div class="panel card"><span class="tag" style="--c:#8a3fe0">AMIGOS</span><h3>Salas privadas</h3><p>Crea una sala, comparte el código y reta a un amigo en duelo o juega a su lado como aliado.</p></div>
+      <div class="panel card gold-rim"><span class="tag" style="--c:#c98a00">CLASIFICATORIO</span><h3>Medallas</h3><p>Compite por tu medalla, de Bronce a Maestro, y escala en el ranking de cada temporada.</p></div>
+    </div>
+  </section>
+
+  <section id="poderes">
+    <p class="kicker">PODERES</p>
+    <h2>Cada poder, una nueva estrategia</h2>
+    <div class="grid g3">
+      <div class="panel power"><img class="ico" src="img/poder-extra.png" alt=""><div><b>Bomba extra</b><span>Coloca más bombas a la vez.</span></div></div>
+      <div class="panel power"><img class="ico" src="img/poder-alcance.png" alt=""><div><b>Alcance</b><span>Tus explosiones llegan más lejos.</span></div></div>
+      <div class="panel power"><img class="ico" src="img/poder-velocidad.png" alt=""><div><b>Velocidad</b><span>Te mueves más rápido por el mapa.</span></div></div>
+      <div class="panel power"><img class="ico" src="img/poder-patada.png" alt=""><div><b>Patada</b><span>Patea bombas que aturden al rival que golpean.</span></div></div>
+      <div class="panel power"><img class="ico" src="img/poder-escudo.png" alt=""><div><b>Escudo</b><span>Te protege de un golpe.</span></div></div>
+      <div class="panel power"><img class="ico" src="img/poder-congelar.png" alt=""><div><b>Congelar</b><span>Dispara un rayo helado que congela al rival.</span></div></div>
+      <div class="panel power"><img class="ico" src="img/poder-dash.png" alt=""><div><b>Dash</b><span>Un impulso veloz que aturde al rival que embistes.</span></div></div>
+      <div class="panel power"><img class="ico" src="img/poder-soplo.png" alt=""><div><b>Soplo</b><span>Una ráfaga que empuja al rival y lo aturde momentáneamente.</span></div></div>
+      <div class="panel power"><img class="ico" src="img/poder-fuerte.png" alt=""><div><b>Bomba fuerte</b><span>Su explosión avanza hasta chocar con un muro o una caja.</span></div></div>
+    </div>
+  </section>
+
+  <section id="heroes">
+    <p class="kicker">HÉROES Y ESTILO</p>
+    <h2>Escoge tu héroe. Personaliza tu estilo.</h2>
+    <div class="heroes">
+      <div class="panel art"><div class="voltar" role="img" aria-label="Voltar"></div><span class="name">VOLTAR</span></div>
+      <div>
+        <p class="lead">Haz que cada partida lleve tu firma. Combina tu héroe con bombas, explosiones, escudos y estelas únicas, de Común a Legendario.</p>
+        <div class="chips"><span>Bombas</span><span>Explosiones</span><span>Escudos</span><span>Estelas</span><span>Fotos de perfil</span><span>Marcos</span></div>
+        <div class="panel bombs">
+          <img src="img/bomba-5.png" alt="Bomba"><img src="img/bomba-3.png" alt="Bomba"><img src="img/bomba-2.png" alt="Bomba"><img src="img/bomba-4.png" alt="Bomba">
+        </div>
+        <div class="notice"><b>Héroes temporales:</b> los personajes que ves actualmente en el juego son de prueba. Los héroes oficiales, como Voltar, están en desarrollo.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="capturas">
+    <p class="kicker">CAPTURAS</p>
+    <h2>Así se vive Crystal Clash</h2>
+    <div class="gallery">
+      <img src="img/captura-partida.jpg" alt="Una partida en curso">
+      <img src="img/captura-vs.jpg" alt="Presentación de los equipos">
+      <img src="img/captura-tienda.jpg" alt="Tienda de bombas">
+      <img src="img/captura-sala.jpg" alt="Sala para jugar con amigos">
+      <img src="img/captura-fin.jpg" alt="Resultados de la partida">
+      <img src="img/captura-menu.jpg" alt="Menú principal">
+    </div>
+  </section>
+
+  <section id="plataformas">
+    <p class="kicker">PLATAFORMAS</p>
+    <h2>Juega donde quieras</h2>
+    <div class="platforms">
+      <div class="panel card best">
+        <span class="tag" style="--c:#c98a00">RECOMENDADO</span>
+        <h3>PC</h3>
+        <ul><li>La experiencia completa: precisión con teclado y toda la acción en pantalla grande.</li><li>Disponible en itch.io.</li></ul>
+        <a class="btn orange" href="#"><span class="two"><small>PRÓXIMAMENTE EN</small>itch.io</span></a>
+      </div>
+      <div class="panel card">
+        <span class="tag" style="--c:#2f6fe0">CELULAR</span>
+        <h3>Android</h3>
+        <ul><li>La misma batalla en tu bolsillo, con joystick o cruceta táctil.</li><li>Tu progreso te acompaña en tu cuenta.</li></ul>
+        <a class="btn blue" href="#"><span class="two"><small>PRÓXIMAMENTE EN</small>Google Play</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="panel gold-rim final-box">
+      <h2>El Cristal te espera</h2>
+      <p class="lead">Reúne a tu equipo, prepara tus bombas y entra a la batalla.</p>
+      <div class="cta">
+        <a class="btn orange" href="#plataformas"><span class="two"><small>PRÓXIMAMENTE EN</small>PC · itch.io</span></a>
+        <a class="btn blue" href="#plataformas"><span class="two"><small>PRÓXIMAMENTE EN</small>Android · Google Play</span></a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>© 2026 Orbital Devs · Crystal Clash<br>Contacto: <a href="mailto:crystalclash.oficial@gmail.com"><b>crystalclash.oficial@gmail.com</b></a></div>
+    <nav><a href="politica-de-privacidad.html">Política de privacidad</a><a href="borrar-cuenta.html">Borrar mi cuenta</a></nav>
+  </div>
+</footer>
+
+<script>
+  // Voltar: idle tres veces y luego idle con parpadeo, a 12 cuadros por segundo.
+  (() => {
+    const sprites = document.querySelectorAll(".voltar");
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const order = [];
+    for (let r = 0; r < 3; r++) for (let i = 0; i < 16; i++) order.push(i);
+    for (let i = 16; i < 32; i++) order.push(i);
+    let k = 0;
+    setInterval(() => {
+      const f = order[k = (k + 1) % order.length];
+      const pos = (f % 4) * 100 / 3 + "% " + Math.floor(f / 4) * 100 / 7 + "%";
+      sprites.forEach(s => s.style.backgroundPosition = pos);
+    }, 1000 / 12);
+  })();
+</script>
+
+</body>
+</html>
